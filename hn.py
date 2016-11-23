@@ -64,6 +64,13 @@ score_chart.set_ylabel('Number of stories')
 fig2 = score_chart.get_figure()
 fig2.savefig('Score_stories.png')
 
+#which hour and day have the most post 
+hour_chart = df['score'].groupby(df['post_hour']).mean().plot(kind ='line', title ='Average Score by hour')
+hour_chart.set_xlabel('Hours')
+hour_chart.set_ylabel('Score')
+fig3 = hour_chart.get_figure()
+fig3.savefig('hour_chart.png')
+
 #which authors consistently get on the front page
 average_score = df['score'].groupby(df['by']).mean()
 print "\n"
@@ -87,7 +94,7 @@ fig3.savefig('Score_type.png')
 #print df.head()
 from sklearn.feature_extraction.text import CountVectorizer
 
-CV = CountVectorizer(ngram_range=(1,2))
+CV = CountVectorizer(ngram_range=(1,99999))
 df_text = df[['score', 'text']].copy()
 df_text.dropna(axis=0, inplace = True)
 X = CV.fit_transform(df_text['text'])
@@ -144,5 +151,5 @@ knn = KNeighborsClassifier(n_neighbors=5)
 knn.fit(X,y)
 print knn.predict([[1,0,0,0,1,10,4]])
 
-from sklearn.model_selection import Kfold
+from sklearn.model_selection import KFold
 
